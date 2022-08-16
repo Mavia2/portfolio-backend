@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages= "com")
 @ComponentScan
 @EnableWebSecurity
 public class Application {

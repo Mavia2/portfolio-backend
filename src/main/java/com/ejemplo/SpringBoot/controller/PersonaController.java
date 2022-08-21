@@ -4,6 +4,8 @@ import com.ejemplo.SpringBoot.model.Persona;
 import com.ejemplo.SpringBoot.service.IPersonaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +33,9 @@ public class PersonaController {
 
         @GetMapping("/get/persona/{id}")
         @ResponseBody 
-        public Persona buscarPersona(@PathVariable Long id){
-        return  persoServ.buscarPersona(id);
+        public ResponseEntity<Persona> buscarPersona(@PathVariable Long id){
+            Persona persona =  persoServ.buscarPersona(id);
+            return new ResponseEntity(persona, HttpStatus.OK);
         }
 
         @DeleteMapping ("/delete/persona/{id}")

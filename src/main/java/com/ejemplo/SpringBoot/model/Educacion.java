@@ -1,12 +1,15 @@
 
 package com.ejemplo.SpringBoot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,18 +30,11 @@ public class Educacion implements Serializable{
     private String fechaInicio;
     private String fechaFin;
     private String lugar;
+    @Column(name="id_persona", nullable = false)
+    private Long  idPersona;
+    
+    
 
-    public Educacion() {
-    }
-
-    public Educacion(Long id, String fotoUrl, String institucion, String titulo, String fechaInicio, String fechaFin, String lugar) {
-        this.id = id;
-        this.fotoUrl = fotoUrl;
-        this.institucion = institucion;
-        this.titulo = titulo;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.lugar = lugar;
-    }
+    
 
 }

@@ -6,7 +6,7 @@ import com.ejemplo.SpringBoot.dto.JwtResponse;
 import com.ejemplo.SpringBoot.dto.UserDTO;
 import com.ejemplo.SpringBoot.security.JwtTokenUtil;
 import com.ejemplo.SpringBoot.service.JwtUserDetailsService;
-import com.ejemplo.SprintBoot.configuration.WebSecurityConfig;
+import com.ejemplo.SpringBoot.configuration.WebSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;

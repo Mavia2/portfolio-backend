@@ -1,5 +1,5 @@
 
-package com.ejemplo.SprintBoot.configuration;
+package com.ejemplo.SpringBoot.configuration;
 
 import com.ejemplo.SpringBoot.security.JwtAuthenticationEntryPoint;
 import com.ejemplo.SpringBoot.security.JwtRequestFilter;
@@ -19,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -33,21 +32,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
-	
-	@Bean
-        public PasswordEncoder passwordEncoder()
-        {
-            return new BCryptPasswordEncoder();
-        }
+
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		// Configura AuthenticationManager para indicarle que servicio tiene que usar
 		// para cargar los datos del usuario para verificar sus credenciales.
-		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(bcryptEncoder);
 	}
-        
-        @Override
+
+	@Override
 	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
@@ -56,11 +52,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
-				// Los endpoints /login y /register no necesitan ser autenticados.			
-				.authorizeRequests().antMatchers("/login","/register").permitAll().
+				// Los endpoints /login y /register no necesitan ser autenticados.
+				.authorizeRequests().antMatchers("/login", "/register").permitAll().
 				// El resto de los endpoints necesita el token JWT para validar el request.
-				anyRequest().authenticated().and().
-				exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				anyRequest().authenticated().and().exceptionHandling()
+				.authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		// Agregamos el filtro para validar el token JWT en cada request.

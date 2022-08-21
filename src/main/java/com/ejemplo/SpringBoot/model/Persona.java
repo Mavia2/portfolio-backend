@@ -1,12 +1,20 @@
 
 package com.ejemplo.SpringBoot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,39 +35,29 @@ public class Persona implements Serializable {
     private String ciudad;
     private String pais;
     private String acercaDe;
-   
-    /* public Persona() {
-    }
-
-    public Persona(Long id, String nombre, String apellido) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-    }
-*/
-
-    public Persona() {
-    }
-
-    public Persona(Long id, String nombre, String apellido, String imagenPerfil, String imagenHeader, String ocupacion, String ciudad, String pais, String acercaDe) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.imagenPerfil = imagenPerfil;
-        this.imagenHeader = imagenHeader;
-        this.ocupacion = ocupacion;
-        this.ciudad = ciudad;
-        this.pais = pais;
-        this.acercaDe = acercaDe;
-    }
-
-    
-    
 
    
+    @OneToOne
+    private User user;
+    
+    @OneToMany
+    @JoinColumn(name = "id_persona")
+    private List<Educacion> educaciones;
+
+    @OneToMany
+    @JoinColumn(name = "id_persona")
+    private List<Experiencia> experiencias;
+
+    @OneToMany
+    @JoinColumn(name = "id_persona")
+    private List<Proyecto> proyectos;
+
+    @OneToMany
+    @JoinColumn(name = "id_persona")
+    private List<Skill> skills;
     
 
     
-    
+
     
 }

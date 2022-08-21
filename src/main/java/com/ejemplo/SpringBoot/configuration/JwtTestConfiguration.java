@@ -1,5 +1,5 @@
 
-package com.ejemplo.SprintBoot.configuration;
+package com.ejemplo.SpringBoot.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

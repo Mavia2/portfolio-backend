@@ -26,21 +26,6 @@ public class Experiencia implements Serializable {
     private String fechaInicio;
     private String fechaFin;
     private String lugar;
-    
-
-    public Experiencia() {
-    }
-
-    public Experiencia(Long id, String fotoUrl, String institucion, String cargo, String descripcion, String fechaInicio, String fechaFin, String lugar) {
-        this.id = id;
-        this.fotoUrl = fotoUrl;
-        this.institucion = institucion;
-        this.cargo = cargo;
-        this.descripcion = descripcion;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.lugar = lugar;
-    }
-
-    
+    @Column(name="id_persona", nullable = false)
+    private Long  idPersona;
 }

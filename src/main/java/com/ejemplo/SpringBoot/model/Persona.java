@@ -35,6 +35,8 @@ public class Persona implements Serializable {
     private String ciudad;
     private String pais;
     private String acercaDe;
+    @Column(name="id_persona", nullable = false)
+    private Long  idPersona;
 
    
     @OneToOne

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,44 +19,74 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PersonaController {
      @Autowired
-    private IPersonaService persoServ;
+    private IPersonaService personaService;
 
         @PostMapping("/new/persona")
-        public void agregarPersona(@RequestBody Persona pers){
-        persoServ.crearPersona(pers);
+        public ResponseEntity<?> agregarPersona(@RequestBody Persona persona){
+            if(!StringUtils.hasText(persona.getNombre())) {
+                return new ResponseEntity("La nombre de la persona es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+        if(!StringUtils.hasText(persona.getApellido())) {
+                return new ResponseEntity("El apellido es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+        if(!StringUtils.hasText(persona.getImagenPerfil())) {
+                return new ResponseEntity("La imagen de perfil es obligatoria.", HttpStatus.BAD_REQUEST);
+            }
+        if(!StringUtils.hasText(persona.getImagenHeader())) {
+                return new ResponseEntity("La imagen del header es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+        if(!StringUtils.hasText(persona.getOcupacion())) {
+                return new ResponseEntity("La ocupacion es obligatoria.", HttpStatus.BAD_REQUEST);
+            }
+        if(!StringUtils.hasText(persona.getCiudad())) {
+                return new ResponseEntity("La ciudad es obligatoria.", HttpStatus.BAD_REQUEST);
+            }
+        if(!StringUtils.hasText(persona.getPais())) {
+                return new ResponseEntity("El pais es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+        if(!StringUtils.hasText(persona.getAcercaDe())) {
+                return new ResponseEntity("El contenido Acerca de es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+      
+         personaService.crearPersona(persona);
+            return new ResponseEntity("Persona creada" ,HttpStatus.CREATED);
         }
 
         @GetMapping("/get/persona")
         @ResponseBody 
-        public List<Persona> verPersonas(){
-        return  persoServ.verPersonas();
+         public ResponseEntity<List<Persona>> verPersonas(){
+            List<Persona> personas = personaService.verPersonas();
+            return  new ResponseEntity(personas, HttpStatus.OK );
         }
 
         @GetMapping("/get/persona/{id}")
         @ResponseBody 
-        public ResponseEntity<Persona> buscarPersona(@PathVariable Long id){
-            Persona persona =  persoServ.buscarPersona(id);
+         public ResponseEntity<Persona> buscarPersona(@PathVariable Long id){
+            Persona persona = personaService.buscarPersona(id);
             return new ResponseEntity(persona, HttpStatus.OK);
         }
-
+       
         @DeleteMapping ("/delete/persona/{id}")
-        public void borrarPersona(@PathVariable Long id){
-        persoServ.borrarPersona(id);
+         public ResponseEntity borrarPersona(@PathVariable Long id){
+        personaService.borrarPersona(id);
+        return new ResponseEntity("Persona borrada con exito", HttpStatus.OK);
         }
-
+        
         @PutMapping ("/update/persona/{id}")
-        public void modificarPersona(@PathVariable Long id, @RequestBody Persona persBody){
-        Persona persona1 = persoServ.buscarPersona(id);
-        if (persona1 != null ) {
-            if(persBody.getNombre() != null)  persona1.setNombre(persBody.getNombre());
-            if(persBody.getApellido()!= null)  persona1.setApellido(persBody.getApellido());
-            if(persBody.getImagenPerfil() != null)  persona1.setImagenPerfil(persBody.getImagenPerfil());
-            if(persBody.getImagenHeader()!= null)  persona1.setImagenHeader(persBody.getImagenHeader());
-            if(persBody.getOcupacion()!= null)  persona1.setOcupacion(persBody.getOcupacion());
-            if(persBody.getCiudad()!= null)  persona1.setCiudad(persBody.getCiudad());
-            if(persBody.getPais()!= null)  persona1.setPais(persBody.getPais());
-            if(persBody.getAcercaDe()!= null)  persona1.setAcercaDe(persBody.getAcercaDe());
-            persoServ.crearPersona(persona1);
+        public ResponseEntity<Persona> modificarPersona(@PathVariable Long id, @RequestBody Persona personaBody){
+        Persona persona = personaService.buscarPersona(id);
+        if (persona != null ) {
+            if(personaBody.getNombre() != null)  persona.setNombre(personaBody.getNombre());
+            if(personaBody.getApellido()!= null)  persona.setApellido(personaBody.getApellido());
+            if(personaBody.getImagenPerfil() != null)  persona.setImagenPerfil(personaBody.getImagenPerfil());
+            if(personaBody.getImagenHeader()!= null)  persona.setImagenHeader(personaBody.getImagenHeader());
+            if(personaBody.getOcupacion()!= null)  persona.setOcupacion(personaBody.getOcupacion());
+            if(personaBody.getCiudad()!= null)  persona.setCiudad(personaBody.getCiudad());
+            if(personaBody.getPais()!= null)  persona.setPais(personaBody.getPais());
+            if(personaBody.getAcercaDe()!= null)  persona.setAcercaDe(personaBody.getAcercaDe());
+            personaService.crearPersona(persona);
+            return new ResponseEntity("La persona fue modificada con exito", HttpStatus.OK);
         }
+         return new ResponseEntity("El id a modificar no existe", HttpStatus.BAD_REQUEST);
     }
 }

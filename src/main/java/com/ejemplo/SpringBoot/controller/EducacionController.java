@@ -65,6 +65,9 @@ public class EducacionController {
         @ResponseBody 
         public ResponseEntity<Educacion> buscarEducacion(@PathVariable Long id){
             Educacion educacion = educacionService.buscarEducacion(id);
+            if(educacion == null) {
+                 return new ResponseEntity("la educacion es inexistente", HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity(educacion, HttpStatus.OK);
         }
 

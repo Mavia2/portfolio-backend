@@ -67,6 +67,9 @@ public class ExperienciaController {
         @ResponseBody 
         public ResponseEntity<Experiencia> buscarExperiencia(@PathVariable Long id){
             Experiencia experiencia = experienciaService.buscarExperiencia(id);
+             if(experiencia == null) {
+                 return new ResponseEntity("la experiencia es inexistente", HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity(experiencia, HttpStatus.OK);
         }
         

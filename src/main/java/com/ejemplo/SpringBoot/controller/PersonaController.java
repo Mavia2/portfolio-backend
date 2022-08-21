@@ -63,6 +63,9 @@ public class PersonaController {
         @ResponseBody 
          public ResponseEntity<Persona> buscarPersona(@PathVariable Long id){
             Persona persona = personaService.buscarPersona(id);
+            if(persona == null) {
+                 return new ResponseEntity("la persona es inexistente", HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity(persona, HttpStatus.OK);
         }
        

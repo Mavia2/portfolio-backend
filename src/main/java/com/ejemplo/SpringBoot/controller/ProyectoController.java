@@ -43,7 +43,7 @@ public class ProyectoController {
             }
                       
             proyectoService.crearProyecto(proyecto);
-            return new ResponseEntity("Educacion creada" ,HttpStatus.CREATED);
+            return new ResponseEntity("Proyecto creado con exito" ,HttpStatus.CREATED);
         }
 
         @GetMapping("/get/proyecto")
@@ -57,6 +57,9 @@ public class ProyectoController {
         @ResponseBody 
         public ResponseEntity<Proyecto> buscarProyecto(@PathVariable Long id){
             Proyecto proyecto = proyectoService.buscarProyecto(id);
+            if(proyecto == null) {
+                 return new ResponseEntity("El proyecto es inexistente", HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity(proyecto, HttpStatus.OK);
         }
 

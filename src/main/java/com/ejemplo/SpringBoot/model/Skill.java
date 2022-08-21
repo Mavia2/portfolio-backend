@@ -21,15 +21,8 @@ public class Skill implements Serializable {
     private Long  id;
     private String nombre;
     private Long porcentaje;
+     @Column(name="id_persona", nullable = false)
+    private Long  idPersona;
    
-    public Skill() {
-    }
-
-    public Skill(Long id, String nombre, Long porcentaje) {
-        this.id = id;
-        this.nombre = nombre;
-        this.porcentaje = porcentaje;
-    }
-    
     
 }

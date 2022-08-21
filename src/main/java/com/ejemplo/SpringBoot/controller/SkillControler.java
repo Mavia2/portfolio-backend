@@ -7,6 +7,9 @@ import com.ejemplo.SpringBoot.service.IProyectoService;
 import com.ejemplo.SpringBoot.service.ISkillService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,29 +26,46 @@ public class SkillControler {
     private ISkillService skillService;
     
     @PostMapping("/new/skill")
-        public void agregarSkill(@RequestBody Skill skill){
-        skillService.crearSkill(skill);
+        public ResponseEntity<?> agregarSkill(@RequestBody Skill skill){
+            if(!StringUtils.hasText(skill.getNombre())) {
+                return new ResponseEntity("El nombre de la skill es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+            if(skill.getPorcentaje() == null){
+                return new ResponseEntity("El porcentaje de la skill es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+            if(skill.getIdPersona() == null){
+                return new ResponseEntity("El idPersona es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+            skillService.crearSkill(skill);
+            return new ResponseEntity("Skill creada" ,HttpStatus.CREATED);
         }
 
+            
         @GetMapping("/get/skill")
         @ResponseBody 
-        public List<Skill> verSkills(){
-        return  skillService.verSkills();
+        public ResponseEntity<List<Skill>> verSkills(){
+            List<Skill> skills = skillService.verSkills();
+            return  new ResponseEntity(skills, HttpStatus.OK );
         }
 
         @GetMapping("/get/skill/{id}")
         @ResponseBody 
-        public Skill buscarSkill(@PathVariable Long id){
-        return  skillService.buscarSkill(id);
+        public ResponseEntity<Skill> buscarSkill(@PathVariable Long id){
+            Skill skill = skillService.buscarSkill(id);
+            if(skill == null) {
+                 return new ResponseEntity("la skill es inexistente", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity(skill, HttpStatus.OK);
         }
 
         @DeleteMapping ("/delete/skill/{id}")
-        public void borrarSkill(@PathVariable Long id){
+        public ResponseEntity borrarSkill(@PathVariable Long id){
         skillService.borrarSkill(id);
+        return new ResponseEntity("Skill borrada con exito", HttpStatus.OK);
         }
 
         @PutMapping ("/update/skill/{id}")
-        public void modificarSkill(@PathVariable Long id, @RequestBody Skill skillBody){
+        public ResponseEntity<Skill> modificarSkill(@PathVariable Long id, @RequestBody Skill skillBody){
         Skill skill = skillService.buscarSkill(id);
         if (skill != null ) {
             if(skillBody.getNombre() != null)  skill.setNombre(skillBody.getNombre());
@@ -53,6 +73,8 @@ public class SkillControler {
             
             
            skillService.crearSkill(skill);
+           return new ResponseEntity("La skill fue modificada con exito", HttpStatus.OK);
         }
+        return new ResponseEntity("El id a modificar no existe", HttpStatus.BAD_REQUEST);
     }
 }

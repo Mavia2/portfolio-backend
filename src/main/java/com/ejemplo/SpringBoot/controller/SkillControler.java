@@ -55,44 +55,4 @@ public class SkillControler {
            skillService.crearSkill(skill);
         }
     }
-  //Proyecto
-    @Autowired
-    private IProyectoService proyectoService;
-    
-    @PostMapping("/new/proyecto")
-        public void agregarProyecto(@RequestBody Proyecto proyecto){
-        proyectoService.crearProyecto(proyecto);
-        }
-
-        @GetMapping("/get/proyecto")
-        @ResponseBody 
-        public List<Proyecto> verProyectos(){
-        return  proyectoService.verProyectos();
-        }
-
-        @GetMapping("/get/proyecto/{id}")
-        @ResponseBody 
-        public Proyecto buscarProyecto(@PathVariable Long id){
-        return  proyectoService.buscarProyecto(id);
-        }
-
-        @DeleteMapping ("/delete/proyecto/{id}")
-        public void borrarProyecto(@PathVariable Long id){
-        proyectoService.borrarProyecto(id);
-        }
-
-        @PutMapping ("/update/proyecto/{id}")
-        public void modificarProyecto(@PathVariable Long id, @RequestBody Proyecto proyectoBody){
-        Proyecto proyecto = proyectoService.buscarProyecto(id);
-        if (proyecto != null ) {
-            if(proyectoBody.getTitulo() != null)  proyecto.setTitulo(proyectoBody.getTitulo());
-            if(proyectoBody.getDescripcion()!= null)  proyecto.setDescripcion(proyectoBody.getDescripcion());
-            if(proyectoBody.getFechaRealizacion()!= null)  proyecto.setFechaRealizacion(proyectoBody.getFechaRealizacion());
-            if(proyectoBody.getProyectoUrl() != null)  proyecto.setProyectoUrl(proyectoBody.getProyectoUrl());
-            
-           proyectoService.crearProyecto(proyecto);
-        }
-    }   
-        
-    
 }

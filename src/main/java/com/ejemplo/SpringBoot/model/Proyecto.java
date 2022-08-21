@@ -24,16 +24,7 @@ public class Proyecto implements Serializable {
     private String descripcion;
     private String fechaRealizacion ;
     private String proyectoUrl;
-
-    public Proyecto() {
-    }
-
-    public Proyecto(Long id, String titulo, String descripcion, String fechaRealizacion, String proyectoUrl) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.fechaRealizacion = fechaRealizacion;
-        this.proyectoUrl = proyectoUrl;
-    }
+    @Column(name="id_persona", nullable = false)
+    private Long  idPersona;
     
 }

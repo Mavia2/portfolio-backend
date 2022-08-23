@@ -37,7 +37,8 @@ public class UserController {
 
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
-
+        
+        @CrossOrigin(origins="http://localhost:4200")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 

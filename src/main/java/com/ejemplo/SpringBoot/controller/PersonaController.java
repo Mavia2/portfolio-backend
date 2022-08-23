@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+
 public class PersonaController {
      @Autowired
     private IPersonaService personaService;
@@ -47,6 +49,12 @@ public class PersonaController {
         if(!StringUtils.hasText(persona.getAcercaDe())) {
                 return new ResponseEntity("El contenido Acerca de es obligatorio.", HttpStatus.BAD_REQUEST);
             }
+         if(!StringUtils.hasText(persona.getCelular())) {
+                return new ResponseEntity("El celular es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
+          if(!StringUtils.hasText(persona.getEmail())) {
+                return new ResponseEntity("El Email es obligatorio.", HttpStatus.BAD_REQUEST);
+            }
       
          personaService.crearPersona(persona);
             return new ResponseEntity("Persona creada" ,HttpStatus.CREATED);
@@ -58,7 +66,8 @@ public class PersonaController {
             List<Persona> personas = personaService.verPersonas();
             return  new ResponseEntity(personas, HttpStatus.OK );
         }
-
+         
+        @CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
         @GetMapping("/get/persona/{id}")
         @ResponseBody 
          public ResponseEntity<Persona> buscarPersona(@PathVariable Long id){
@@ -69,12 +78,14 @@ public class PersonaController {
             return new ResponseEntity(persona, HttpStatus.OK);
         }
        
+        @CrossOrigin(origins="http://localhost:4200")
         @DeleteMapping ("/delete/persona/{id}")
          public ResponseEntity borrarPersona(@PathVariable Long id){
         personaService.borrarPersona(id);
         return new ResponseEntity("Persona borrada con exito", HttpStatus.OK);
         }
         
+        @CrossOrigin(origins="http://localhost:4200", allowCredentials = "true" )
         @PutMapping ("/update/persona/{id}")
         public ResponseEntity<Persona> modificarPersona(@PathVariable Long id, @RequestBody Persona personaBody){
         Persona persona = personaService.buscarPersona(id);
@@ -87,6 +98,8 @@ public class PersonaController {
             if(personaBody.getCiudad()!= null)  persona.setCiudad(personaBody.getCiudad());
             if(personaBody.getPais()!= null)  persona.setPais(personaBody.getPais());
             if(personaBody.getAcercaDe()!= null)  persona.setAcercaDe(personaBody.getAcercaDe());
+            if(personaBody.getCelular()!= null)  persona.setCelular(personaBody.getCelular());
+            if(personaBody.getEmail()!= null)  persona.setEmail(personaBody.getEmail());
             personaService.crearPersona(persona);
             return new ResponseEntity("La persona fue modificada con exito", HttpStatus.OK);
         }

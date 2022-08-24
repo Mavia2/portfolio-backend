@@ -1,6 +1,7 @@
 package com.ejemplo.SpringBoot.controller;
 
 import com.ejemplo.SpringBoot.model.Persona;
+import com.ejemplo.SpringBoot.security.controller.Mensaje;
 import com.ejemplo.SpringBoot.service.IPersonaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,8 +102,8 @@ public class PersonaController {
             if(personaBody.getCelular()!= null)  persona.setCelular(personaBody.getCelular());
             if(personaBody.getEmail()!= null)  persona.setEmail(personaBody.getEmail());
             personaService.crearPersona(persona);
-            return new ResponseEntity("La persona fue modificada con exito", HttpStatus.OK);
+            return new ResponseEntity( new Mensaje("La persona fue modificada con exito"), HttpStatus.OK);
         }
-         return new ResponseEntity("El id a modificar no existe", HttpStatus.BAD_REQUEST);
+         return new ResponseEntity( new Mensaje("El id a modificar no existe"), HttpStatus.BAD_REQUEST);
     }
 }

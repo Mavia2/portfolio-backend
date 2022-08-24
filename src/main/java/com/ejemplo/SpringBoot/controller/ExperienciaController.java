@@ -2,12 +2,14 @@
 package com.ejemplo.SpringBoot.controller;
 
 import com.ejemplo.SpringBoot.model.Experiencia;
+import com.ejemplo.SpringBoot.security.controller.Mensaje;
 import com.ejemplo.SpringBoot.service.IExperienciaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true" )
 @RestController
 public class ExperienciaController {
     @Autowired
     private IExperienciaService experienciaService;
     
+   
     @PostMapping("/new/experiencia")
         public ResponseEntity<?> agregarExperiencia(@RequestBody Experiencia experiencia){
             if(!StringUtils.hasText(experiencia.getFotoUrl())) {
@@ -51,10 +55,10 @@ public class ExperienciaController {
             if(experiencia.getIdPersona() == null){
                 return new ResponseEntity("El idPersona es obligatorio.", HttpStatus.BAD_REQUEST);
             }
-            experienciaService.crearExperiencia(experiencia);
-            return new ResponseEntity("Experiencia creada" ,HttpStatus.CREATED);
+            Experiencia newExperiencia = experienciaService.crearExperiencia(experiencia);
+            return new ResponseEntity(newExperiencia ,HttpStatus.CREATED);
         }    
-
+        
         @GetMapping("/get/experiencia")
         @ResponseBody 
         public ResponseEntity<List<Experiencia>> verExperiencias(){
@@ -68,7 +72,7 @@ public class ExperienciaController {
         public ResponseEntity<Experiencia> buscarExperiencia(@PathVariable Long id){
             Experiencia experiencia = experienciaService.buscarExperiencia(id);
              if(experiencia == null) {
-                 return new ResponseEntity("la experiencia es inexistente", HttpStatus.BAD_REQUEST);
+                 return new ResponseEntity(new Mensaje("la experiencia es inexistente"), HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity(experiencia, HttpStatus.OK);
         }
@@ -77,7 +81,7 @@ public class ExperienciaController {
         @DeleteMapping ("/delete/experiencia/{id}")
         public ResponseEntity borrarExperiencia(@PathVariable Long id){
         experienciaService.borrarExperiencia(id);
-        return new ResponseEntity("Experiencia borrada con exito", HttpStatus.OK);
+        return new ResponseEntity(new Mensaje("Experiencia borrada con exito"), HttpStatus.OK);
         }
         
 
@@ -95,8 +99,8 @@ public class ExperienciaController {
             if(experienciaBody.getLugar()!= null)  experiencia.setLugar(experienciaBody.getLugar());
             
            experienciaService.crearExperiencia(experiencia);
-            return new ResponseEntity("La experiencia fue modificada con exito", HttpStatus.OK);
+            return new ResponseEntity(new Mensaje("La experiencia fue modificada con exito"), HttpStatus.OK);
         }
-         return new ResponseEntity("El id a modificar no existe", HttpStatus.BAD_REQUEST);
+         return new ResponseEntity(new Mensaje("El id a modificar no existe"), HttpStatus.BAD_REQUEST);
     }
 }

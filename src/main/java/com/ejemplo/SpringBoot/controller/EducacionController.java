@@ -3,6 +3,7 @@ package com.ejemplo.SpringBoot.controller;
 
 
 import com.ejemplo.SpringBoot.model.Educacion;
+import com.ejemplo.SpringBoot.security.controller.Mensaje;
 import com.ejemplo.SpringBoot.service.IEducacionService;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true" )
 @RestController
 public class EducacionController {
     
@@ -29,29 +32,29 @@ public class EducacionController {
     @PostMapping("/new/educacion")
         public ResponseEntity<?> agregarEducacion(@RequestBody Educacion educacion){
             if(!StringUtils.hasText(educacion.getFotoUrl())) {
-                return new ResponseEntity("La URL de la foto es obligatoria.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("La URL de la foto es obligatoria."), HttpStatus.BAD_REQUEST);
             }
              if(!StringUtils.hasText(educacion.getInstitucion())) {
-                return new ResponseEntity("La institución es obligatoria.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("La institución es obligatoria."), HttpStatus.BAD_REQUEST);
             }
              if(!StringUtils.hasText(educacion.getTitulo())) {
-                return new ResponseEntity("El título es obligatorio.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("El título es obligatorio."), HttpStatus.BAD_REQUEST);
             }
               if(!StringUtils.hasText(educacion.getFechaInicio())) {
-                return new ResponseEntity("La fecha de inicio obligatoria.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("La fecha de inicio obligatoria."), HttpStatus.BAD_REQUEST);
             }
                if(!StringUtils.hasText(educacion.getFechaFin())) {
-                return new ResponseEntity("La fecha de finalización es obligatoria.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("La fecha de finalización es obligatoria."), HttpStatus.BAD_REQUEST);
             }
                 if(!StringUtils.hasText(educacion.getLugar())) {
-                return new ResponseEntity("El lugar es obligatorio.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("El lugar es obligatorio."), HttpStatus.BAD_REQUEST);
             }
                 if(educacion.getIdPersona() == null){
-                return new ResponseEntity("El idPersona es obligatorio.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("El idPersona es obligatorio."), HttpStatus.BAD_REQUEST);
             }
             
             educacionService.crearEducacion(educacion);
-            return new ResponseEntity("Educacion creada" ,HttpStatus.CREATED);
+            return new ResponseEntity(new Mensaje("Educacion creada") ,HttpStatus.CREATED);
         }
 
         @GetMapping("/get/educacion")
@@ -66,7 +69,7 @@ public class EducacionController {
         public ResponseEntity<Educacion> buscarEducacion(@PathVariable Long id){
             Educacion educacion = educacionService.buscarEducacion(id);
             if(educacion == null) {
-                 return new ResponseEntity("la educacion es inexistente", HttpStatus.BAD_REQUEST);
+                 return new ResponseEntity(new Mensaje("la educacion es inexistente"), HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity(educacion, HttpStatus.OK);
         }
@@ -74,7 +77,7 @@ public class EducacionController {
         @DeleteMapping ("/delete/educacion/{id}")
         public ResponseEntity borrarEducacion(@PathVariable Long id){
         educacionService.borrarEducacion(id);
-        return new ResponseEntity("Educacion borrada con exito", HttpStatus.OK);
+        return new ResponseEntity(new Mensaje("Educacion borrada con exito"), HttpStatus.OK);
         }
 
         @PutMapping ("/update/educacion/{id}")
@@ -89,9 +92,9 @@ public class EducacionController {
             if(educacionBody.getLugar()!= null)  educacion.setLugar(educacionBody.getLugar());
             
            educacionService.crearEducacion(educacion);
-           return new ResponseEntity("La educacion fue modificada con exito", HttpStatus.OK);
+           return new ResponseEntity(new Mensaje("La educacion fue modificada con exito"), HttpStatus.OK);
         }
-        return new ResponseEntity("El id a modificar no existe", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(new Mensaje("El id a modificar no existe"), HttpStatus.BAD_REQUEST);
     }
     
 }

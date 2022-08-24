@@ -3,6 +3,7 @@ package com.ejemplo.SpringBoot.controller;
 
 import com.ejemplo.SpringBoot.model.Proyecto;
 import com.ejemplo.SpringBoot.model.Skill;
+import com.ejemplo.SpringBoot.security.controller.Mensaje;
 import com.ejemplo.SpringBoot.service.IProyectoService;
 import com.ejemplo.SpringBoot.service.ISkillService;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true" )
 @RestController
 public class SkillControler {
     
@@ -28,16 +31,16 @@ public class SkillControler {
     @PostMapping("/new/skill")
         public ResponseEntity<?> agregarSkill(@RequestBody Skill skill){
             if(!StringUtils.hasText(skill.getNombre())) {
-                return new ResponseEntity("El nombre de la skill es obligatorio.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("El nombre de la skill es obligatorio."), HttpStatus.BAD_REQUEST);
             }
             if(skill.getPorcentaje() == null){
-                return new ResponseEntity("El porcentaje de la skill es obligatorio.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("El porcentaje de la skill es obligatorio."), HttpStatus.BAD_REQUEST);
             }
             if(skill.getIdPersona() == null){
-                return new ResponseEntity("El idPersona es obligatorio.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("El idPersona es obligatorio."), HttpStatus.BAD_REQUEST);
             }
             skillService.crearSkill(skill);
-            return new ResponseEntity("Skill creada" ,HttpStatus.CREATED);
+            return new ResponseEntity(new Mensaje("Skill creada con éxito.") ,HttpStatus.CREATED);
         }
 
             
@@ -53,7 +56,7 @@ public class SkillControler {
         public ResponseEntity<Skill> buscarSkill(@PathVariable Long id){
             Skill skill = skillService.buscarSkill(id);
             if(skill == null) {
-                 return new ResponseEntity("la skill es inexistente", HttpStatus.BAD_REQUEST);
+                 return new ResponseEntity(new Mensaje("La Skill es inexistente."), HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity(skill, HttpStatus.OK);
         }
@@ -61,7 +64,7 @@ public class SkillControler {
         @DeleteMapping ("/delete/skill/{id}")
         public ResponseEntity borrarSkill(@PathVariable Long id){
         skillService.borrarSkill(id);
-        return new ResponseEntity("Skill borrada con exito", HttpStatus.OK);
+        return new ResponseEntity(new Mensaje("Skill borrada con éxito."), HttpStatus.OK);
         }
 
         @PutMapping ("/update/skill/{id}")
@@ -73,8 +76,8 @@ public class SkillControler {
             
             
            skillService.crearSkill(skill);
-           return new ResponseEntity("La skill fue modificada con exito", HttpStatus.OK);
+           return new ResponseEntity(new Mensaje("La skill fue modificada con éxito."), HttpStatus.OK);
         }
-        return new ResponseEntity("El id a modificar no existe", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(new Mensaje("El id a modificar no existe."), HttpStatus.BAD_REQUEST);
     }
 }

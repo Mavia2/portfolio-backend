@@ -1,10 +1,8 @@
 
 package com.ejemplo.SpringBoot.controller;
 
-import com.ejemplo.SpringBoot.model.Proyecto;
 import com.ejemplo.SpringBoot.model.Skill;
 import com.ejemplo.SpringBoot.security.controller.Mensaje;
-import com.ejemplo.SpringBoot.service.IProyectoService;
 import com.ejemplo.SpringBoot.service.ISkillService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

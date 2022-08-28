@@ -22,23 +22,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
 @CrossOrigin
 @Import(WebSecurityConfig.class)
 public class UserController {
 
 	@Autowired
-	private AuthenticationManager authenticationManager ;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
-        
-        @CrossOrigin(origins="http://localhost:4200")
+
+	@CrossOrigin(origins = "https://mi-portfolio-5b0c8.web.app")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 

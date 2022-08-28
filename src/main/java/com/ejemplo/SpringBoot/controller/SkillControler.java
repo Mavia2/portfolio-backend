@@ -19,62 +19,62 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true" )
+@CrossOrigin(origins = "https://mi-portfolio-5b0c8.web.app", allowCredentials = "true")
 @RestController
 public class SkillControler {
-    
+
     @Autowired
     private ISkillService skillService;
-    
+
     @PostMapping("/new/skill")
-        public ResponseEntity<?> agregarSkill(@RequestBody Skill skill){
-            if(!StringUtils.hasText(skill.getNombre())) {
-                return new ResponseEntity(new Mensaje("El nombre de la skill es obligatorio."), HttpStatus.BAD_REQUEST);
-            }
-            if(skill.getPorcentaje() == null){
-                return new ResponseEntity(new Mensaje("El porcentaje de la skill es obligatorio."), HttpStatus.BAD_REQUEST);
-            }
-            if(skill.getIdPersona() == null){
-                return new ResponseEntity(new Mensaje("El idPersona es obligatorio."), HttpStatus.BAD_REQUEST);
-            }
-            skillService.crearSkill(skill);
-            return new ResponseEntity(new Mensaje("Skill creada con éxito.") ,HttpStatus.CREATED);
+    public ResponseEntity<?> agregarSkill(@RequestBody Skill skill) {
+        if (!StringUtils.hasText(skill.getNombre())) {
+            return new ResponseEntity(new Mensaje("El nombre de la skill es obligatorio."), HttpStatus.BAD_REQUEST);
         }
-
-            
-        @GetMapping("/get/skill")
-        @ResponseBody 
-        public ResponseEntity<List<Skill>> verSkills(){
-            List<Skill> skills = skillService.verSkills();
-            return  new ResponseEntity(skills, HttpStatus.OK );
+        if (skill.getPorcentaje() == null) {
+            return new ResponseEntity(new Mensaje("El porcentaje de la skill es obligatorio."), HttpStatus.BAD_REQUEST);
         }
-
-        @GetMapping("/get/skill/{id}")
-        @ResponseBody 
-        public ResponseEntity<Skill> buscarSkill(@PathVariable Long id){
-            Skill skill = skillService.buscarSkill(id);
-            if(skill == null) {
-                 return new ResponseEntity(new Mensaje("La Skill es inexistente."), HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity(skill, HttpStatus.OK);
+        if (skill.getIdPersona() == null) {
+            return new ResponseEntity(new Mensaje("El idPersona es obligatorio."), HttpStatus.BAD_REQUEST);
         }
+        skillService.crearSkill(skill);
+        return new ResponseEntity(new Mensaje("Skill creada con éxito."), HttpStatus.CREATED);
+    }
 
-        @DeleteMapping ("/delete/skill/{id}")
-        public ResponseEntity borrarSkill(@PathVariable Long id){
+    @GetMapping("/get/skill")
+    @ResponseBody
+    public ResponseEntity<List<Skill>> verSkills() {
+        List<Skill> skills = skillService.verSkills();
+        return new ResponseEntity(skills, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/skill/{id}")
+    @ResponseBody
+    public ResponseEntity<Skill> buscarSkill(@PathVariable Long id) {
+        Skill skill = skillService.buscarSkill(id);
+        if (skill == null) {
+            return new ResponseEntity(new Mensaje("La Skill es inexistente."), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(skill, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/skill/{id}")
+    public ResponseEntity borrarSkill(@PathVariable Long id) {
         skillService.borrarSkill(id);
         return new ResponseEntity(new Mensaje("Skill borrada con éxito."), HttpStatus.OK);
-        }
+    }
 
-        @PutMapping ("/update/skill/{id}")
-        public ResponseEntity<Skill> modificarSkill(@PathVariable Long id, @RequestBody Skill skillBody){
+    @PutMapping("/update/skill/{id}")
+    public ResponseEntity<Skill> modificarSkill(@PathVariable Long id, @RequestBody Skill skillBody) {
         Skill skill = skillService.buscarSkill(id);
-        if (skill != null ) {
-            if(skillBody.getNombre() != null)  skill.setNombre(skillBody.getNombre());
-            if(skillBody.getPorcentaje()!= null)  skill.setPorcentaje(skillBody.getPorcentaje());
-            
-            
-           skillService.crearSkill(skill);
-           return new ResponseEntity(new Mensaje("La skill fue modificada con éxito."), HttpStatus.OK);
+        if (skill != null) {
+            if (skillBody.getNombre() != null)
+                skill.setNombre(skillBody.getNombre());
+            if (skillBody.getPorcentaje() != null)
+                skill.setPorcentaje(skillBody.getPorcentaje());
+
+            skillService.crearSkill(skill);
+            return new ResponseEntity(new Mensaje("La skill fue modificada con éxito."), HttpStatus.OK);
         }
         return new ResponseEntity(new Mensaje("El id a modificar no existe."), HttpStatus.BAD_REQUEST);
     }

@@ -19,88 +19,92 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true" )
+@CrossOrigin(origins = "https://mi-portfolio-5b0c8.web.app", allowCredentials = "true")
 @RestController
 public class ExperienciaController {
     @Autowired
     private IExperienciaService experienciaService;
-    
-   
+
     @PostMapping("/new/experiencia")
-        public ResponseEntity<?> agregarExperiencia(@RequestBody Experiencia experiencia){
-            if(!StringUtils.hasText(experiencia.getFotoUrl())) {
-                return new ResponseEntity("La URL de la foto es obligatoria.", HttpStatus.BAD_REQUEST);
-                }
-            if(!StringUtils.hasText(experiencia.getInstitucion())) {
-                return new ResponseEntity("La institución es obligatoria.", HttpStatus.BAD_REQUEST);
-            }
-            if(!StringUtils.hasText(experiencia.getCargo())) {
-                return new ResponseEntity("El cargo desarrollado es obligatorio.", HttpStatus.BAD_REQUEST);
-            }
-            if(!StringUtils.hasText(experiencia.getDescripcion())) {
-                return new ResponseEntity("La descripción es obligatoria.", HttpStatus.BAD_REQUEST);
-            }
-            if(!StringUtils.hasText(experiencia.getFechaInicio())) {
-                return new ResponseEntity("La fecha de Inicio es obligatoria.", HttpStatus.BAD_REQUEST);
-            }
-            if(!StringUtils.hasText(experiencia.getFechaFin())) {
-                return new ResponseEntity("La fecha de finalización es obligatoria.", HttpStatus.BAD_REQUEST);
-            }
-            if(!StringUtils.hasText(experiencia.getCargo())) {
-                return new ResponseEntity("El cargo desarrollado es obligatorio.", HttpStatus.BAD_REQUEST);
-            }
-            if(!StringUtils.hasText(experiencia.getLugar())) {
-                return new ResponseEntity("El lugar es obligatorio.", HttpStatus.BAD_REQUEST); 
-            }
-            if(experiencia.getIdPersona() == null){
-                return new ResponseEntity("El idPersona es obligatorio.", HttpStatus.BAD_REQUEST);
-            }
-            Experiencia newExperiencia = experienciaService.crearExperiencia(experiencia);
-            return new ResponseEntity(newExperiencia ,HttpStatus.CREATED);
-        }    
-        
-        @GetMapping("/get/experiencia")
-        @ResponseBody 
-        public ResponseEntity<List<Experiencia>> verExperiencias(){
-            List<Experiencia> experiencias = experienciaService.verExperiencias();
-            return  new ResponseEntity(experiencias, HttpStatus.OK );
+    public ResponseEntity<?> agregarExperiencia(@RequestBody Experiencia experiencia) {
+        if (!StringUtils.hasText(experiencia.getFotoUrl())) {
+            return new ResponseEntity("La URL de la foto es obligatoria.", HttpStatus.BAD_REQUEST);
         }
-        
-
-        @GetMapping("/get/experiencia/{id}")
-        @ResponseBody 
-        public ResponseEntity<Experiencia> buscarExperiencia(@PathVariable Long id){
-            Experiencia experiencia = experienciaService.buscarExperiencia(id);
-             if(experiencia == null) {
-                 return new ResponseEntity(new Mensaje("la experiencia es inexistente"), HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity(experiencia, HttpStatus.OK);
+        if (!StringUtils.hasText(experiencia.getInstitucion())) {
+            return new ResponseEntity("La institución es obligatoria.", HttpStatus.BAD_REQUEST);
         }
-        
+        if (!StringUtils.hasText(experiencia.getCargo())) {
+            return new ResponseEntity("El cargo desarrollado es obligatorio.", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(experiencia.getDescripcion())) {
+            return new ResponseEntity("La descripción es obligatoria.", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(experiencia.getFechaInicio())) {
+            return new ResponseEntity("La fecha de Inicio es obligatoria.", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(experiencia.getFechaFin())) {
+            return new ResponseEntity("La fecha de finalización es obligatoria.", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(experiencia.getCargo())) {
+            return new ResponseEntity("El cargo desarrollado es obligatorio.", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(experiencia.getLugar())) {
+            return new ResponseEntity("El lugar es obligatorio.", HttpStatus.BAD_REQUEST);
+        }
+        if (experiencia.getIdPersona() == null) {
+            return new ResponseEntity("El idPersona es obligatorio.", HttpStatus.BAD_REQUEST);
+        }
+        Experiencia newExperiencia = experienciaService.crearExperiencia(experiencia);
+        return new ResponseEntity(newExperiencia, HttpStatus.CREATED);
+    }
 
-        @DeleteMapping ("/delete/experiencia/{id}")
-        public ResponseEntity borrarExperiencia(@PathVariable Long id){
+    @GetMapping("/get/experiencia")
+    @ResponseBody
+    public ResponseEntity<List<Experiencia>> verExperiencias() {
+        List<Experiencia> experiencias = experienciaService.verExperiencias();
+        return new ResponseEntity(experiencias, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/experiencia/{id}")
+    @ResponseBody
+    public ResponseEntity<Experiencia> buscarExperiencia(@PathVariable Long id) {
+        Experiencia experiencia = experienciaService.buscarExperiencia(id);
+        if (experiencia == null) {
+            return new ResponseEntity(new Mensaje("la experiencia es inexistente"), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(experiencia, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/experiencia/{id}")
+    public ResponseEntity borrarExperiencia(@PathVariable Long id) {
         experienciaService.borrarExperiencia(id);
         return new ResponseEntity(new Mensaje("Experiencia borrada con exito"), HttpStatus.OK);
-        }
-        
+    }
 
-        @PutMapping ("/update/experiencia/{id}")
-        public ResponseEntity<Experiencia> modificarExperiencia(@PathVariable Long id, @RequestBody Experiencia experienciaBody){
+    @PutMapping("/update/experiencia/{id}")
+    public ResponseEntity<Experiencia> modificarExperiencia(@PathVariable Long id,
+            @RequestBody Experiencia experienciaBody) {
         Experiencia experiencia = experienciaService.buscarExperiencia(id);
-        
-        if (experiencia != null ) {
-            if(experienciaBody.getFotoUrl() != null)  experiencia.setFotoUrl(experienciaBody.getFotoUrl());
-            if(experienciaBody.getInstitucion()!= null)  experiencia.setInstitucion(experienciaBody.getInstitucion());
-            if(experienciaBody.getCargo() != null)  experiencia.setCargo(experienciaBody.getCargo());
-            if(experienciaBody.getDescripcion()!= null)  experiencia.setDescripcion(experienciaBody.getDescripcion());
-            if(experienciaBody.getFechaInicio()!= null)  experiencia.setFechaInicio(experienciaBody.getFechaInicio());
-            if(experienciaBody.getFechaFin()!= null)  experiencia.setFechaFin(experienciaBody.getFechaFin());
-            if(experienciaBody.getLugar()!= null)  experiencia.setLugar(experienciaBody.getLugar());
-            
-           experienciaService.crearExperiencia(experiencia);
+
+        if (experiencia != null) {
+            if (experienciaBody.getFotoUrl() != null)
+                experiencia.setFotoUrl(experienciaBody.getFotoUrl());
+            if (experienciaBody.getInstitucion() != null)
+                experiencia.setInstitucion(experienciaBody.getInstitucion());
+            if (experienciaBody.getCargo() != null)
+                experiencia.setCargo(experienciaBody.getCargo());
+            if (experienciaBody.getDescripcion() != null)
+                experiencia.setDescripcion(experienciaBody.getDescripcion());
+            if (experienciaBody.getFechaInicio() != null)
+                experiencia.setFechaInicio(experienciaBody.getFechaInicio());
+            if (experienciaBody.getFechaFin() != null)
+                experiencia.setFechaFin(experienciaBody.getFechaFin());
+            if (experienciaBody.getLugar() != null)
+                experiencia.setLugar(experienciaBody.getLugar());
+
+            experienciaService.crearExperiencia(experiencia);
             return new ResponseEntity(new Mensaje("La experiencia fue modificada con exito"), HttpStatus.OK);
         }
-         return new ResponseEntity(new Mensaje("El id a modificar no existe"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(new Mensaje("El id a modificar no existe"), HttpStatus.BAD_REQUEST);
     }
 }
